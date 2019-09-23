@@ -1,0 +1,26 @@
+{
+	"name": "analogway-livepremier",
+	"version": "1.0.0",
+	"api_version": "1.0.0",
+	"keywords": [
+		"Protocol",
+		"Image Processing"
+	],
+	"manufacturer": "Analog Way",
+	"product": "LivePremier",
+	"shortname": "livepremier",
+	"main": "livepremier.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/bitfocus/companion-module-analogway-livepremier.git"
+	},
+	"author": "Dorian Meid <meid@backstage.org>",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/bitfocus/companion-module-analogway-livepremier/issues"
+	},
+	"homepage": "https://github.com/bitfocus/companion-module-analogway-livepremier#readme"
+}
