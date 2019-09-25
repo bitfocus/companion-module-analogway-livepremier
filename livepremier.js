@@ -477,7 +477,7 @@ instance.prototype.action = function(action) {
 		}
 	}
 
-	if(action.action = 'multitake') {
+	if(action.action == 'multitake') {
 		path = '/api/tpp/v1/take';
 		bodyjson = {
 			screenIds: [],
@@ -513,39 +513,6 @@ instance.prototype.action = function(action) {
 		}
 	});
 
-	/*
-	if (action.action == 'post') {
-		var body;
-		try {
-			body = JSON.parse(action.options.body);
-		} catch(e){
-			self.log('error', 'HTTP POST Request aborted: Malformed JSON Body (' + e.message+ ')');
-			self.status(self.STATUS_ERROR, e.message);
-			return
-		}
-		self.system.emit('rest', cmd, body, function (err, result) {
-			if (err !== null) {
-				self.log('error', 'HTTP POST Request failed (' + result.error.code + ')');
-				self.status(self.STATUS_ERROR, result.error.code);
-			}
-			else {
-				self.status(self.STATUS_OK);
-			}
-		});
-	}
-	else if (action.action == 'get') {
-
-		self.system.emit('rest_get', cmd, function (err, result) {
-			if (err !== null) {
-				self.log('error', 'HTTP GET Request failed (' + result.error.code + ')');
-				self.status(self.STATUS_ERROR, result.error.code);
-			}
-			else {
-				self.status(self.STATUS_OK);
-			}
-		});
-	}
-	*/
 };
 
 

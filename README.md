@@ -1,2 +1,2 @@
-# companion-module-analogway-livepremiere
+# companion-module-analogway-livepremier
 See HELP.md and LICENSE
