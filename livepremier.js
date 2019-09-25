@@ -448,18 +448,18 @@ instance.prototype.actions = function(system) {
 
 instance.prototype.action = function(action) {
 	var self = this;
-	var path = action.action.match(/^[\w/{}]+/)[0] || '';
+	var path = action.action.match(/^[\w/{}-]+/)[0] || '';
 	var body = '';
 	if (action.action.match(/ (.+)$/)) {
 		body = action.action.match(/ (.+)$/)[1];
 	}
 	var bodyjson = {};
 
-	/*if ( self.config.host === undefined || self.config.host.match(self.REGEX_IP) === null ) {
-		self.log('error', 'The entered host adress is not a valid IP');
-		debug('Abort, wrong ip');
+	if ( self.config.host === undefined || self.config.host === '' ) {
+		self.log('error', 'No IP or hostname entered');
+		debug('Abort, no ip');
 		return;
-	}*/
+	}
 
 
 	if (action.options) {
