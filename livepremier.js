@@ -152,7 +152,7 @@ instance.prototype.actions = function(system) {
 				{
 					type: 'dropdown',
 					label: 'Recall to',
-					id: 'destinationId',
+					id: 'target',
 					choices: [
 						{id: 'preview', label: 'Preview'},
 						{id: 'program', label: 'Program'}
