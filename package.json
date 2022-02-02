@@ -5,17 +5,17 @@
 	"keywords": [
 		"Protocol",
 		"Image Processing",
-    "LivePremier"
+		"LivePremier"
 	],
 	"manufacturer": "Analog Way",
-  "product": [
+	"product": [
 		"Aquilon alpha",
-    "Aquilon RS1",
-    "Aquilon RS2",
-    "Aquilon RS3",
-    "Aquilon RS4",
-    "Aquilon C",
-    "Aquilon C+"
+		"Aquilon RS1",
+		"Aquilon RS2",
+		"Aquilon RS3",
+		"Aquilon RS4",
+		"Aquilon C",
+		"Aquilon C+"
 	],
 	"shortname": "livepremier",
 	"main": "livepremier.js",
