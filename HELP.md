@@ -7,3 +7,7 @@ That means at this time no feedback is provided by the module. If you want to ha
 # Configuration
 
 Just enter the IPv4 address and there you go. If you can't use TCP port 80 for the Aquilon (e.g. with the simulator) you can also optionally specify a port. IPv6 or hostname is not supported yet.
+
+# Note
+
+The module can control different types of LivePremier hardware and you can also reconfigure the cards on site. The module doesn't know or care about what type of hardware you have and what its capabilities are. So most of the time more options are offered than your actual hardware may support. Using none exitant screens or inputs or other resources usually doesn't give you an error, but it is not recommended.

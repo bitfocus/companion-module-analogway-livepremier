@@ -28,6 +28,44 @@ function instance(system, id, config) {
 		}
 	}
 
+  this.choicesAudioIn = [{
+    label: 'None',
+    id: '"sourceType":"none"'
+  }];
+  this.choicesAudioOut = [];
+
+  for (var i=1; i<= 64; i++) {
+		this.choicesAudioOut.push( {
+			label: `Dante Out ${Math.floor((i-1)/8)+1}/${(i-1)%8+1} (${i})`,
+			id: 'dante/channels/'+i,
+		} );
+    this.choicesAudioIn.push( {
+			label: `Dante In ${Math.floor((i-1)/8)+1}/${(i-1)%8+1} (${i})`,
+			id: `"sourceType":"dante","channelId":${i}`,
+		} );
+	}
+
+  for (var i=1; i<= 24; i++) {
+    for (var c=1; c<= 8; c++) {
+		  this.choicesAudioOut.push( {
+			  label: `Output ${i} Channel ${c}`,
+			  id: `outputs/${i}/channels/${c}`
+		  } );
+      this.choicesAudioIn.push( {
+			  label: `Input ${i} Channel ${c}`,
+			  id: `"sourceType":"input","sourceId":${i},"channelId":${c}`
+		  } );
+    }
+	}
+
+  for (var i=1; i<= 2; i++) {
+    for (var c=1; c<= 8; c++) {
+		  this.choicesAudioOut.push( {
+			  label: `Multiviewer ${i} Channel ${c}`,
+			  id: `multiviewers/${i}/channels/${c}`
+		  } );
+    }
+	}
 
 
 	// super-constructor
@@ -443,9 +481,77 @@ instance.prototype.actions = function(system) {
 		'multitake': {
 			label: 'Take multiple Screens and Aux-Screens',
 			options: this.choicesDest
-		}
+		},
+    'audiorouteblock': {
+      label: 'Route audio block',
+      options: [
+        {
+          type: 'dropdown',
+          label: 'First Output Channel',
+          id: 'out',
+          choices: this.choicesAudioOut,
+          default: 'dante/channels/1',
+          minChoicesForSearch: 0
+        },
+        {
+          type: 'dropdown',
+          label: 'First Input Channel',
+          id: 'in',
+          choices: this.choicesAudioIn,
+          default: '"sourceType":"none"',
+          minChoicesForSearch: 0,
+          tooltip: 'Tip: Source None virtually expands to the block size'
+        },
+        {
+          type: 'number',
+          label: 'Block Size',
+          id: 'blocksize',
+          default: 8,
+          min: 1,
+          max: this.choicesAudioOut.length,
+          range: true
+        }
+      ]
+    },
+    'audioroute': {
+      label: 'Route audio channel(s)',
+      options: [
+        {
+          type: 'dropdown',
+          label: '(first) output channel',
+          id: 'out',
+          choices: this.choicesAudioOut,
+          default: 'dante/channels/1',
+          minChoicesForSearch: 0
+        },
+        {
+          type: 'dropdown',
+          label: 'input channel(s)',
+          id: 'in',
+          choices: this.choicesAudioIn,
+          default: '"sourceType":"none"',
+          minChoicesForSearch: 0,
+          multiple: true,
+          minSelection: 0,
+        }
+      ]
+    }
 	});
 };
+
+instance.prototype.sendcmd = function(path, bodyjson) {
+  let self = this;
+	self.system.emit('rest', 'http://'+ self.config.host + path, bodyjson, function (err, result) {
+		if (err !== null) {
+			self.log('error', 'HTTP POST Request failed (' + result.error.code + ')');
+			self.status(self.STATUS_ERROR, result.error.code);
+		}
+		else {
+			self.status(self.STATUS_OK);
+		}
+	});
+
+}
 
 instance.prototype.action = function(action) {
 	var self = this;
@@ -495,6 +601,46 @@ instance.prototype.action = function(action) {
 		}
 	}
 
+  if(action.action == 'audiorouteblock') {
+      let outstart = this.choicesAudioOut.findIndex((item) => {
+        return item.id === action.options.out;
+      });
+      let instart = this.choicesAudioIn.findIndex((item) => {
+        return item.id === action.options.in;
+      });
+      if (outstart > -1 && instart > -1) {
+        let max = Math.min(this.choicesAudioOut.length - outstart, this.choicesAudioOut.length - instart, action.options.blocksize) // since 'None' is input at index 0 no extra test is needed, it is possible to fill all outputs with none
+        for (let s=0; s< max; s += 1) {
+          path = `/api/tpp/v1/audio/transmitters/${this.choicesAudioOut[outstart + s].id}/source`;
+          bodyjson = JSON.parse(`{${this.choicesAudioIn[instart === 0 ? 0 : instart + s].id}}`);
+          self.sendcmd(path, bodyjson);
+        }
+      }
+      return;
+  }
+
+	if(action.action == 'audioroute') {
+    if (action.options.in.length >0) {
+      let outstart = this.choicesAudioOut.findIndex((item) => {
+        return item.id === action.options.out;
+      }); 
+      if (outstart > -1) {
+        let max = Math.min(this.choicesAudioOut.length - outstart, action.options.in.length)
+        for (let s=0; s< max; s += 1) {
+          path = `/api/tpp/v1/audio/transmitters/${this.choicesAudioOut[outstart + s].id}/source`;
+          bodyjson = JSON.parse(`{${action.options.in[s]}}`);
+          self.sendcmd(path, bodyjson);
+        }
+      }
+      return;
+    } else {
+      path = `/api/tpp/v1/audio/transmitters/${action.options.out}/source`;
+      bodyjson = JSON.parse(`{${this.choicesAudioIn[0].id}}`);
+      self.sendcmd(path, bodyjson);
+      return;
+    }
+  }
+
 	if (bodyjson === {}) {
 		try {
 			bodyjson = JSON.parse(body);
@@ -504,16 +650,7 @@ instance.prototype.action = function(action) {
 		}
 	}
 
-	self.system.emit('rest', 'http://'+ self.config.host + path, bodyjson, function (err, result) {
-		if (err !== null) {
-			self.log('error', 'HTTP POST Request failed (' + result.error.code + ')');
-			self.status(self.STATUS_ERROR, result.error.code);
-		}
-		else {
-			self.status(self.STATUS_OK);
-		}
-	});
-
+  self.sendcmd(path, bodyjson);
 };
 
 
