@@ -1,13 +1,22 @@
 {
 	"name": "analogway-livepremier",
-	"version": "1.0.2",
+	"version": "1.1.0",
 	"api_version": "1.0.0",
 	"keywords": [
 		"Protocol",
-		"Image Processing"
+		"Image Processing",
+    "LivePremier"
 	],
 	"manufacturer": "Analog Way",
-	"product": "LivePremier",
+  "product": [
+		"Aquilon alpha",
+    "Aquilon RS1",
+    "Aquilon RS2",
+    "Aquilon RS3",
+    "Aquilon RS4",
+    "Aquilon C",
+    "Aquilon C+"
+	],
 	"shortname": "livepremier",
 	"main": "livepremier.js",
 	"scripts": {

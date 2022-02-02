@@ -65,8 +65,9 @@ instance.prototype.config_fields = function () {
 			id: 'host',
 			label: 'IP of LivePremier device',
 			default: '192.168.2.140',
-			regex: self.REGEX_IP,
-			width: 6
+			regex: '/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(:([1-9]|[1-8][0-9]|9[0-9]|[1-8][0-9]{2}|9[0-8][0-9]|99[0-9]|[1-8][0-9]{3}|9[0-8][0-9]{2}|99[0-8][0-9]|999[0-9]|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-4]))?$/',
+			width: 6,
+      tooltip: 'Enter only the IPv4 adress without "http://", you may also add a port number'
 		}
 	]
 };
