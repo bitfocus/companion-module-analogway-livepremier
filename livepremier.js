@@ -119,9 +119,7 @@ class LivePremierREST extends InstanceBase {
 						}
 					}
 				}
-			}
-
-			if (action.actionId == 'audiorouteblock') {
+			} else if (action.actionId == 'audiorouteblock') {
 				let outstart = this.choicesAudioOut.findIndex((item) => {
 					return item.id === action.options.out
 				})
@@ -141,9 +139,7 @@ class LivePremierREST extends InstanceBase {
 					}
 				}
 				return
-			}
-
-			if (action.action == 'audioroute') {
+			} else if (action.actionId == 'audioroute') {
 				if (action.options.in.length > 0) {
 					let outstart = this.choicesAudioOut.findIndex((item) => {
 						return item.id === action.options.out
