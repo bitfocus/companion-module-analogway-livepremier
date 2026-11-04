@@ -15,12 +15,18 @@
 	],
 	"legacyIds": [],
 	"runtime": {
-		"type": "node18",
+		"type": "node26",
 		"api": "nodejs-ipc",
 		"apiVersion": "0.0.0",
 		"entrypoint": "../livepremier.js"
 	},
 	"manufacturer": "Analog Way",
-	"products": ["Aquilon"],
-	"keywords": ["Protocol", "Image Processing", "LivePremier"]
+	"products": [
+		"Aquilon"
+	],
+	"keywords": [
+		"Protocol",
+		"Image Processing",
+		"LivePremier"
+	]
 }
