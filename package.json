@@ -4,7 +4,7 @@
 	"type": "module",
 	"main": "livepremier.js",
 	"scripts": {
-		"test": "node --test",
+		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "companion-module-build",
 		"package": "companion-module-build"
 	},
