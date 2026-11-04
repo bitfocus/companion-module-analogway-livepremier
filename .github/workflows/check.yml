@@ -1,0 +1,18 @@
+name: Check module
+on:
+  push:
+  pull_request:
+jobs:
+  package:
+    name: Package module
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '26'
+      - run: npm install --global yarn@1.22.22
+      - run: yarn install --frozen-lockfile
+      - run: yarn test
+      - run: yarn build
